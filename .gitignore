@@ -21,3 +21,4 @@ frontend/node_modules/
 
 # Build do backend
 backend/node_modules/
+backend/.env
