@@ -75,7 +75,7 @@ class StudentService {
   }
 
   async delete(id: number) {
-    await this.findById(id); // Verifica se o estudante existe
+    await this.findById(id);
     await prisma.student.delete({
       where: { id }
     });
