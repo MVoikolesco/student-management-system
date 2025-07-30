@@ -18,6 +18,7 @@ coverage/
 # Build do frontend
 frontend/dist/
 frontend/node_modules/
+frontend/.env
 
 # Build do backend
 backend/node_modules/
