@@ -9,8 +9,10 @@ datasource db {
 
 model Student {
   id        Int      @id @default(autoincrement())
+  ra        String?  @unique
   name      String
   email     String   @unique
+  cpf       String   @unique
   birthDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

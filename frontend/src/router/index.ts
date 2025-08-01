@@ -1,48 +1,56 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { authGuard } from './middleware/auth'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import StudentsView from '@/views/StudentsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      redirect: '/login'
-    },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
-      meta: { requiresGuest: true }
+      component: LoginView,
+      meta: { public: true }
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/RegisterView.vue'),
-      meta: { requiresGuest: true }
+      component: RegisterView,
+      meta: { public: true }
     },
     {
-      path: '/students',
-      name: 'students',
-      component: () => import('../views/StudentsView.vue'),
-      meta: { requiresAuth: true }
+      path: '/',
+      component: DefaultLayout,
+      children: [
+        {
+          path: '',
+          redirect: { name: 'dashboard' }
+        },
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: () => import('@/views/DashboardView.vue')
+        },
+        {
+          path: 'students',
+          name: 'students',
+          component: StudentsView,
+          beforeEnter: (to, from, next) => {
+            console.log('Entrando na rota students')
+            next()
+          }
+        }
+      ]
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: { name: 'dashboard' }
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    next('/login')
-    return
-  }
-  
-  if (to.meta.requiresGuest && authStore.isAuthenticated) {
-    next('/students')
-    return
-  }
-  
-  next()
-})
+router.beforeEach(authGuard)
 
-export default router 
+export default router
