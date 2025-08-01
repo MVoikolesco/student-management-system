@@ -14,8 +14,8 @@
                 label="Email"
                 type="email"
                 :rules="[
-                  v => !!v || 'Email é obrigatório',
-                  v => /.+@.+\..+/.test(v) || 'Email deve ser válido'
+                  (v: string) => !!v || 'Email é obrigatório',
+                  (v: string) => /.+@.+\..+/.test(v) || 'Email deve ser válido'
                 ]"
                 required
               />
@@ -24,7 +24,7 @@
                 v-model="formData.password"
                 label="Senha"
                 type="password"
-                :rules="[v => !!v || 'Senha é obrigatória']"
+                :rules="[(v: string) => !!v || 'Senha é obrigatória']"
                 required
               />
 
@@ -105,8 +105,9 @@ const handleSubmit = async () => {
 }
 
 onMounted(() => {
-    isAuthenticated: auth.isAuthenticated,
-    user: auth.user
-  })
+  if (auth.isAuthenticated && auth.user) {
+    const redirect = route.query.redirect?.toString() || '/dashboard'
+    router.push(redirect)
+  }
 })
 </script>
