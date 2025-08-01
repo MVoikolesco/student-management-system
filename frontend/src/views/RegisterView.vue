@@ -2,122 +2,109 @@
   <v-container class="fill-height">
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card>
-          <v-card-title class="text-center pt-4">
-            <h2>Cadastro</h2>
+        <v-card class="elevation-12">
+          <v-card-title class="text-h5 text-center pa-4">
+            Cadastro
           </v-card-title>
+
           <v-card-text>
-            <v-form @submit.prevent="handleRegister" ref="form">
+            <v-form ref="form" @submit.prevent="handleSubmit">
               <v-text-field
-                v-model="name"
+                v-model="formData.name"
                 label="Nome"
+                :rules="[v => !!v || 'Nome é obrigatório']"
                 required
-                :rules="[rules.required]"
               />
+
               <v-text-field
-                v-model="email"
+                v-model="formData.email"
                 label="Email"
                 type="email"
+                :rules="[
+                  v => !!v || 'Email é obrigatório',
+                  v => /.+@.+\..+/.test(v) || 'Email deve ser válido'
+                ]"
                 required
-                :rules="[rules.required, rules.email]"
               />
+
               <v-text-field
-                v-model="password"
+                v-model="formData.password"
                 label="Senha"
                 type="password"
+                :rules="[
+                  v => !!v || 'Senha é obrigatória',
+                  v => v?.length >= 6 || 'Senha deve ter no mínimo 6 caracteres'
+                ]"
                 required
-                :rules="[rules.required, rules.password]"
               />
-              <v-text-field
-                v-model="confirmPassword"
-                label="Confirmar Senha"
-                type="password"
-                required
-                :rules="[rules.required, rules.confirmPassword]"
-              />
-              <v-btn
-                type="submit"
-                color="primary"
-                block
-                class="mt-4"
-                :loading="loading"
-              >
-                Cadastrar e Entrar
-              </v-btn>
-              <v-btn
-                variant="text"
-                block
-                class="mt-2"
-                @click="$router.push('/login')"
-              >
-                Já tem uma conta? Faça login
-              </v-btn>
+
+              <v-card-actions class="pa-0">
+                <v-spacer />
+                <v-btn
+                  color="primary"
+                  type="submit"
+                  :loading="auth.loading"
+                  block
+                >
+                  Cadastrar
+                </v-btn>
+              </v-card-actions>
             </v-form>
           </v-card-text>
+
+          <v-divider class="mt-2"></v-divider>
+
+          <v-card-text class="text-center pt-2">
+            <span class="text-body-2">Já tem uma conta?</span>
+            <v-btn
+              variant="text"
+              color="primary"
+              class="ml-2"
+              :to="{ name: 'login' }"
+              :disabled="auth.loading"
+            >
+              Faça login
+            </v-btn>
+          </v-card-text>
         </v-card>
+
+        <v-snackbar
+          v-model="showError"
+          color="error"
+          timeout="3000"
+        >
+          {{ auth.error }}
+        </v-snackbar>
       </v-col>
     </v-row>
-
-    <!-- Snackbar para mensagens -->
-    <v-snackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="3000"
-    >
-      {{ snackbar.text }}
-    </v-snackbar>
   </v-container>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import type { RegisterData } from '@/types/auth'
 
-const authStore = useAuthStore()
+const router = useRouter()
+const auth = useAuthStore()
 const form = ref<any>(null)
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const loading = ref(false)
+const showError = ref(false)
 
-const snackbar = ref({
-  show: false,
-  text: '',
-  color: 'success'
+const formData = ref<RegisterData>({
+  name: '',
+  email: '',
+  password: ''
 })
 
-const rules = {
-  required: (v: any) => !!v || 'Campo obrigatório',
-  email: (v: any) => /.+@.+\..+/.test(v) || 'E-mail inválido',
-  password: (v: any) => v.length >= 6 || 'A senha deve ter no mínimo 6 caracteres',
-  confirmPassword: (v: any) => v === password.value || 'As senhas não coincidem'
-}
+const handleSubmit = async () => {
+  if (!form.value?.validate()) return
 
-const showMessage = (text: string, color: 'success' | 'error' = 'success') => {
-  snackbar.value = {
-    show: true,
-    text,
-    color
-  }
-}
-
-const handleRegister = async () => {
-  const { valid } = await form.value.validate()
-  
-  if (!valid) return
-
-  loading.value = true
   try {
-    await authStore.register({
-      name: name.value,
-      email: email.value,
-      password: password.value
-    })
-  } catch (error: any) {
-    showMessage(error.message, 'error')
-  } finally {
-    loading.value = false
+    await auth.register(formData.value)
+    router.push('/dashboard')
+  } catch (error) {
+    showError.value = true
   }
 }
-</script> 
+</script>
