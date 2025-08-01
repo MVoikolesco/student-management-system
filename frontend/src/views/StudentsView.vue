@@ -194,10 +194,8 @@ const formatDate = (date: string) => {
 }
 
 onMounted(async () => {
-  console.log('StudentsView montada')
   try {
     await fetchStudents()
-    console.log('Estudantes carregados:', students.value)
   } catch (e) {
     console.error('Erro ao carregar estudantes:', e)
   }

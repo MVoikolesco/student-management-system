@@ -89,19 +89,14 @@ const formData = ref<LoginCredentials>({
 })
 
 const handleSubmit = async () => {
-  console.log('Tentando fazer login...')
   if (!form.value?.validate()) {
-    console.log('Formulário inválido')
     return
   }
 
   try {
-    console.log('Enviando credenciais:', { email: formData.value.email })
     await auth.login(formData.value)
-    console.log('Login bem-sucedido')
     
     const redirect = route.query.redirect?.toString() || '/dashboard'
-    console.log('Redirecionando para:', redirect)
     await router.push(redirect)
   } catch (error) {
     console.error('Erro no login:', error)
@@ -110,9 +105,6 @@ const handleSubmit = async () => {
 }
 
 onMounted(() => {
-  console.log('LoginView montada')
-  console.log('Query params:', route.query)
-  console.log('Estado de autenticação:', {
     isAuthenticated: auth.isAuthenticated,
     user: auth.user
   })
