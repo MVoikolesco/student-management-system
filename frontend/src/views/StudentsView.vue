@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row class="mb-4">
     <v-col cols="12">
       <Breadcrumbs :items="[
         { title: 'Dashboard', href: '/dashboard' },
@@ -58,7 +58,7 @@
               <td>{{ student.cpf }}</td>
               <td>{{ student.email }}</td>
               <td>{{ formatDate(student.birthDate) }}</td>
-              <td>
+              <td class="d-flex align-center">
                 <v-btn
                   icon="mdi-pencil"
                   variant="text"
@@ -194,10 +194,8 @@ const formatDate = (date: string) => {
 }
 
 onMounted(async () => {
-  console.log('StudentsView montada')
   try {
     await fetchStudents()
-    console.log('Estudantes carregados:', students.value)
   } catch (e) {
     console.error('Erro ao carregar estudantes:', e)
   }

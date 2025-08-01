@@ -38,7 +38,6 @@ const router = createRouter({
           name: 'students',
           component: StudentsView,
           beforeEnter: (to, from, next) => {
-            console.log('Entrando na rota students')
             next()
           }
         }

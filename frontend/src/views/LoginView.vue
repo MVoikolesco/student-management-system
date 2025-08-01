@@ -14,8 +14,8 @@
                 label="Email"
                 type="email"
                 :rules="[
-                  v => !!v || 'Email é obrigatório',
-                  v => /.+@.+\..+/.test(v) || 'Email deve ser válido'
+                  (v: string) => !!v || 'Email é obrigatório',
+                  (v: string) => /.+@.+\..+/.test(v) || 'Email deve ser válido'
                 ]"
                 required
               />
@@ -24,7 +24,7 @@
                 v-model="formData.password"
                 label="Senha"
                 type="password"
-                :rules="[v => !!v || 'Senha é obrigatória']"
+                :rules="[(v: string) => !!v || 'Senha é obrigatória']"
                 required
               />
 
@@ -89,19 +89,14 @@ const formData = ref<LoginCredentials>({
 })
 
 const handleSubmit = async () => {
-  console.log('Tentando fazer login...')
   if (!form.value?.validate()) {
-    console.log('Formulário inválido')
     return
   }
 
   try {
-    console.log('Enviando credenciais:', { email: formData.value.email })
     await auth.login(formData.value)
-    console.log('Login bem-sucedido')
     
     const redirect = route.query.redirect?.toString() || '/dashboard'
-    console.log('Redirecionando para:', redirect)
     await router.push(redirect)
   } catch (error) {
     console.error('Erro no login:', error)
@@ -110,11 +105,38 @@ const handleSubmit = async () => {
 }
 
 onMounted(() => {
-  console.log('LoginView montada')
-  console.log('Query params:', route.query)
-  console.log('Estado de autenticação:', {
-    isAuthenticated: auth.isAuthenticated,
-    user: auth.user
-  })
+  if (auth.isAuthenticated && auth.user) {
+    const redirect = route.query.redirect?.toString() || '/dashboard'
+    router.push(redirect)
+  }
 })
 </script>
+
+<style lang="scss" scoped>
+
+.v-card {
+  border: 1px solid $border-light;
+  background-color: $surface;
+  
+  &-title {
+    color: $text-primary;
+    padding: 1rem;
+  }
+
+  &-text {
+    color: $text-secondary;
+    padding: 1rem;
+  }
+}
+
+.text-body-2 {
+  color: $text-secondary;
+}
+
+.v-snackbar.error {
+  .v-snackbar__content {
+    color: $error;
+    background-color: rgba($error, 0.1);
+  }
+}
+</style>
