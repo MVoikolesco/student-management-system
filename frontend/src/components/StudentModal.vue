@@ -122,13 +122,19 @@ import { computed } from 'vue'
 
 const isEditing = computed(() => !!props.student)
 
+const formatDateForInput = (dateString: string) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0]
+}
+
 watch(() => props.student, (newStudent) => {
   if (newStudent) {
     formData.value = {
       name: newStudent.name,
       email: newStudent.email,
       cpf: newStudent.cpf,
-      birthDate: newStudent.birthDate
+      birthDate: formatDateForInput(newStudent.birthDate)
     }
   } else {
     formData.value = {

@@ -6,30 +6,40 @@
       <v-row>
         <v-col cols="12" md="6">
           <v-card>
+            <v-card-title class="text-primary">
+              <v-icon start color="primary" icon="mdi-account-circle" class="me-2" />
+              Bem-vindo!
+            </v-card-title>
             <v-card-text>
-              <p class="text-h6">Bem-vindo ao Sistema Acadêmico, {{ auth.user?.name }}!</p>
+              <p class="text-h6 mb-4">Olá, {{ auth.user?.name }}!</p>
+              <p class="text-body-1">Bem-vindo ao Sistema de Gestão Acadêmica. Aqui você pode gerenciar todos os aspectos relacionados aos estudantes.</p>
             </v-card-text>
           </v-card>
         </v-col>
 
         <v-col cols="12" md="6">
           <v-card>
-            <v-card-title>Ações Rápidas</v-card-title>
-            <v-card-text>
+            <v-card-title class="text-primary">
+              <v-icon start color="primary" icon="mdi-lightning-bolt" class="me-2" />
+              Ações Rápidas
+            </v-card-title>
+            <v-card-text style="padding: 16px; max-height: 68px;">
               <v-btn
                 color="primary"
-                block
-                prepend-icon="mdi-account-plus"
+                prepend-icon="mdi-account-group"
                 :to="{ name: 'students' }"
-                class="mb-2"
+                class="text-none"
+                block
+                size="default"
               >
-                Cadastrar Novo Aluno
+                Gerenciar Alunos
               </v-btn>
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
 
+      <!--
       <v-row class="mt-4">
         <v-col cols="12">
           <v-card>
@@ -49,6 +59,7 @@
           </v-card>
         </v-col>
       </v-row>
+      -->
     </v-col>
   </v-row>
 </template>
