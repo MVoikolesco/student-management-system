@@ -35,7 +35,7 @@ Os arquivos já contêm as configurações necessárias para executar o projeto 
 
 ### 3. Iniciando com Docker
 
-O modo mais simples de executar o projeto é usando Docker Compose:
+O modo mais simples de executar o projeto é usando Docker Compose. Primeiro, vamos instalar as dependências e depois iniciar os containers:
 
 ```bash
 # Construir e iniciar todos os containers
@@ -43,10 +43,14 @@ docker-compose up --build
 
 # Para executar em background
 docker-compose up -d --build
+
+# Instalar dependências do frontend e backend
+docker-compose run --rm frontend npm install
+docker-compose run --rm backend npm install
 ```
 
 A aplicação estará disponível em:
-- Frontend: http://localhost:8080
+- Frontend: http://localhost:5173
 - Backend: http://localhost:3000
 
 ### 4. Desenvolvimento Local (Sem Docker)
@@ -96,6 +100,15 @@ npm run dev      # Inicia em modo desenvolvimento
 npm run build    # Compila para produção
 npm run preview  # Visualiza build de produção
 npm run lint     # Executa linter
+```
+
+## Acesso Inicial
+
+Após iniciar o sistema, você pode criar um novo usuário através da página de registro ou usar as credenciais padrão:
+
+```
+Email: admin@example.com
+Senha: admin123
 ```
 
 ## Estrutura do Projeto
