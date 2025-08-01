@@ -1,0 +1,567 @@
+// Importação de variáveis
+@import './_colors';
+
+// Estilos globais
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: $background;
+  color: $text-primary;
+}
+
+// Classes de texto
+.text {
+  &-primary {
+    color: $primary;
+  }
+  
+  &-secondary {
+    color: $secondary;
+  }
+
+  &-body {
+    color: $text-primary;
+    
+    &-secondary {
+      color: $text-secondary;
+    }
+    
+    &-disabled {
+      color: $text-disabled;
+    }
+  }
+}
+
+// Classes de background
+.bg {
+  &-primary {
+    background-color: $primary;
+    
+    &-light {
+      background-color: $primary-light;
+    }
+    
+    &-dark {
+      background-color: $primary-dark;
+    }
+  }
+  
+  &-secondary {
+    background-color: $secondary;
+    
+    &-light {
+      background-color: $secondary-light;
+    }
+    
+    &-dark {
+      background-color: $secondary-dark;
+    }
+  }
+
+  &-surface {
+    background-color: $surface;
+  }
+}
+
+// Classes de cartões
+.v-card {
+  border: 1px solid $border-light;
+  border-radius: 12px !important;
+  
+  &-title {
+    color: $text-primary;
+    padding: 1rem;
+    
+    &-primary {
+      background-color: $primary;
+      color: $background;
+    }
+    
+    &-light {
+      background-color: $primary-light;
+      color: $text-primary;
+    }
+  }
+  
+  &-content {
+    color: $text-secondary;
+    padding: 1rem;
+  }
+  
+  &-actions {
+    padding: 1rem;
+    border-top: 1px solid $border-light;
+  }
+}
+
+// Classes de botões
+.v-btn {
+  border-radius: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: .4s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9.6px;
+  
+  // Tamanhos
+  &--size-small {
+    font-size: 12px;
+    padding: 6.4px 12.8px;
+  }
+
+  &--size-default {
+    font-size: 12.8px;
+    padding: 9.6px 19.2px;
+  }
+
+  &--size-large {
+    font-size: 13.6px;
+    padding: 12.8px 25.6px;
+  }
+
+  // Variantes
+  &--variant-text {
+    color: $primary;
+    background: transparent;
+    
+    &:hover {
+      background-color: rgba($primary, 0.1);
+    }
+
+    &.v-btn--disabled {
+      color: $text-disabled;
+    }
+  }
+  
+  &--variant-elevated {
+    background-color: $primary;
+    color: $white1;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2),
+                0 2px 2px 0 rgba(0,0,0,.14),
+                0 1px 5px 0 rgba(0,0,0,.12);
+    
+    &:hover {
+      background-color: $primary-dark;
+      box-shadow: 0px 5px 20px rgba($primary, 0.35);
+    }
+
+    &.v-btn--disabled {
+      background-color: rgba($primary, 0.12);
+      color: rgba($white1, 0.38);
+      box-shadow: none;
+    }
+  }
+  
+  &--variant-outlined {
+    border: thin solid currentColor;
+    background-color: transparent;
+    color: $primary;
+    
+    &:hover {
+      background-color: rgba($primary, 0.05);
+    }
+
+    &.v-btn--disabled {
+      border-color: rgba($primary, 0.12);
+      color: rgba($primary, 0.38);
+    }
+  }
+
+  &--variant-flat {
+    background-color: $primary;
+    color: $white1;
+    
+    &:hover {
+      background-color: $primary-dark;
+    }
+
+    &.v-btn--disabled {
+      background-color: rgba($primary, 0.12);
+      color: rgba($white1, 0.38);
+    }
+  }
+
+  // Estados
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  // Cores
+  &.success {
+    &.v-btn--variant-elevated,
+    &.v-btn--variant-flat {
+      background-color: $green1;
+      color: $white1;
+      
+      &:hover {
+        background-color: $green3;
+        box-shadow: 0px 5px 20px rgba($green1, 0.35);
+      }
+    }
+    
+    &.v-btn--variant-text,
+    &.v-btn--variant-outlined {
+      color: $green1;
+      
+      &:hover {
+        background-color: rgba($green1, 0.1);
+      }
+    }
+  }
+
+  &.error {
+    &.v-btn--variant-elevated,
+    &.v-btn--variant-flat {
+      background-color: $red1;
+      color: $white1;
+      
+      &:hover {
+        background-color: $red3;
+        box-shadow: 0px 5px 20px rgba($red1, 0.35);
+      }
+    }
+    
+    &.v-btn--variant-text,
+    &.v-btn--variant-outlined {
+      color: $red1;
+      
+      &:hover {
+        background-color: rgba($red1, 0.1);
+      }
+    }
+  }
+
+  &.warning {
+    &.v-btn--variant-elevated,
+    &.v-btn--variant-flat {
+      background-color: $yellow1;
+      color: $white1;
+      
+      &:hover {
+        background-color: $yellow3;
+        box-shadow: 0px 5px 20px rgba($yellow1, 0.35);
+      }
+    }
+    
+    &.v-btn--variant-text,
+    &.v-btn--variant-outlined {
+      color: $yellow1;
+      
+      &:hover {
+        background-color: rgba($yellow1, 0.1);
+      }
+    }
+  }
+
+  // Arredondado
+  &.rounded {
+    border-radius: 50%;
+    min-width: 36px;
+    padding: 0;
+    
+    &.v-btn--size-small {
+      width: 30px;
+      height: 30px;
+    }
+    
+    &.v-btn--size-default {
+      width: 38px;
+      height: 38px;
+    }
+    
+    &.v-btn--size-large {
+      width: 46px;
+      height: 46px;
+    }
+  }
+}
+
+// Classes de inputs
+.v-field {
+  border-radius: 6px;
+  transition: .2s;
+
+  .v-field__input {
+    font-size: 14.4px !important;
+    padding: 9.6px 12.8px !important;
+    color: $black2 !important;
+    caret-color: $blue4 !important;
+
+    &::placeholder {
+      color: $light15 !important;
+    }
+
+    input {
+      color: $black2 !important;
+    }
+  }
+
+  .v-field__outline {
+    --v-field-border-width: 2px !important;
+    border-color: $light14 !important;
+    color: $black2 !important;
+  }
+
+  &.v-field--focused {
+    .v-field__outline {
+      border-color: $blue4 !important;
+    }
+  }
+
+  &.v-field--error {
+    .v-field__outline {
+      border-color: $red1 !important;
+    }
+  }
+
+  &.v-field--disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+
+    .v-field__input {
+      color: $light15 !important;
+    }
+  }
+
+  // Variantes
+  &.v-field--variant-solo {
+    box-shadow: none !important;
+    background-color: $light14 !important;
+
+    .v-field__input {
+      background-color: $light14 !important;
+    }
+
+    &.v-field--focused {
+      background-color: $light14 !important;
+    }
+
+    &.v-field--error {
+      background-color: $light14 !important;
+    }
+  }
+
+  &.v-field--variant-outlined {
+    background-color: transparent !important;
+
+    .v-field__input {
+      background-color: $light14 !important;
+    }
+
+    &.v-field--focused {
+      background-color: transparent !important;
+      
+      .v-field__input {
+        background-color: $light14 !important;
+      }
+    }
+
+    &.v-field--error {
+      background-color: transparent !important;
+      
+      .v-field__input {
+        background-color: $light14 !important;
+      }
+    }
+  }
+}
+
+// Estilos para labels
+.v-label {
+  font-size: 12.8px;
+  color: $text-secondary;
+
+  &.v-label--active {
+    color: $primary;
+  }
+
+  &.error--text {
+    color: $red1;
+  }
+}
+
+// Estilos para mensagens de erro
+.v-messages {
+  font-size: 9.6px;
+  color: $text-secondary;
+  min-height: 16px;
+  padding-top: 3.2px;
+
+  &__message {
+    line-height: 12px;
+  }
+
+  &.error--text {
+    color: $red1;
+  }
+}
+
+// Estilos para textarea
+.v-textarea {
+  .v-field__input {
+    padding: 12.8px;
+    min-height: 96px;
+  }
+}
+
+// Estilos de layout
+.v-container {
+  > .v-row:first-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+.v-row {
+  > .v-col {
+    .v-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .v-card-text {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+// Estilos de tabela
+.v-table {
+  th {
+    font-weight: 600;
+    color: $text-primary;
+    white-space: nowrap;
+  }
+
+  td {
+    color: $text-secondary;
+  }
+
+  // Coluna de ações
+  td:last-child {
+    white-space: nowrap;
+    
+    .v-btn {
+      margin-right: 4px;
+      
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// Estilos do Breadcrumb
+.v-breadcrumbs {
+  padding: 0 20px;
+  height: 54.4px;
+  background-color: $white1;
+  display: flex;
+  align-items: center;
+
+  .v-breadcrumbs__list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .v-breadcrumbs-item {
+    font-weight: 600;
+    font-size: 12px;
+    color: $light23;
+    text-decoration: none;
+    transition: .4s;
+
+    &--link {
+      &:hover {
+        color: $blue1;
+      }
+    }
+
+    &--disabled {
+      color: $blue1;
+      opacity: 1;
+    }
+  }
+
+  .v-breadcrumbs-divider {
+    color: $light23;
+    margin: 0 6.4px;
+
+    .v-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+// Classes de estado
+.state {
+  &-success {
+    color: $success;
+    background-color: rgba($success, 0.1);
+  }
+  
+  &-error {
+    color: $error;
+    background-color: rgba($error, 0.1);
+  }
+  
+  &-warning {
+    color: $warning;
+    background-color: rgba($warning, 0.1);
+  }
+  
+  &-info {
+    color: $info;
+    background-color: rgba($info, 0.1);
+  }
+}
+
+// Classes de borda
+.border {
+  &-light {
+    border: 1px solid $border-light;
+  }
+  
+  &-dark {
+    border: 1px solid $border-dark;
+  }
+  
+  &-primary {
+    border: 1px solid $primary;
+  }
+  
+  &-secondary {
+    border: 1px solid $secondary;
+  }
+}
+
+// Classes de margem e padding
+$spacings: (
+  0: 0,
+  1: 4px,
+  2: 8px,
+  3: 16px,
+  4: 24px,
+  5: 32px
+);
+
+@each $key, $value in $spacings {
+  .ma-#{$key} { margin: $value; }
+  .pa-#{$key} { padding: $value; }
+  
+  .mt-#{$key} { margin-top: $value; }
+  .mb-#{$key} { margin-bottom: $value; }
+  .ml-#{$key} { margin-left: $value; }
+  .mr-#{$key} { margin-right: $value; }
+  
+  .pt-#{$key} { padding-top: $value; }
+  .pb-#{$key} { padding-bottom: $value; }
+  .pl-#{$key} { padding-left: $value; }
+  .pr-#{$key} { padding-right: $value; }
+}
