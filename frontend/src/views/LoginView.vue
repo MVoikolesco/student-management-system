@@ -111,3 +111,32 @@ onMounted(() => {
   }
 })
 </script>
+
+<style lang="scss" scoped>
+
+.v-card {
+  border: 1px solid $border-light;
+  background-color: $surface;
+  
+  &-title {
+    color: $text-primary;
+    padding: 1rem;
+  }
+
+  &-text {
+    color: $text-secondary;
+    padding: 1rem;
+  }
+}
+
+.text-body-2 {
+  color: $text-secondary;
+}
+
+.v-snackbar.error {
+  .v-snackbar__content {
+    color: $error;
+    background-color: rgba($error, 0.1);
+  }
+}
+</style>
