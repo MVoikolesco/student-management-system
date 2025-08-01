@@ -1,87 +1,75 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import router from '@/router'
-import api from '@/services/api'
-
-interface LoginData {
-  email: string
-  password: string
-}
-
-interface RegisterData {
-  name: string
-  email: string
-  password: string
-}
-
-interface User {
-  id: number
-  name: string
-  email: string
-  createdAt: string
-}
-
-interface AuthResponse {
-  user: User
-  token: string
-}
+import type { User, LoginCredentials, RegisterData } from '@/types/auth'
+import { authService } from '@/services/auth.service'
+import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref<string | null>(localStorage.getItem('token'))
+  const router = useRouter()
   const user = ref<User | null>(null)
-  const isAuthenticated = computed(() => !!token.value)
+  const loading = ref(false)
+  const error = ref<string | null>(null)
 
-  const setAuthData = ({ user: userData, token: newToken }: AuthResponse) => {
-    token.value = newToken
-    user.value = userData
-    localStorage.setItem('token', newToken)
+  const isAuthenticated = computed(() => !!user.value)
+
+  const initialize = () => {
+    if (authService.isAuthenticated()) {
+      const savedUser = authService.getUser()
+      if (savedUser) {
+        user.value = savedUser
+      }
+      authService.initialize()
+    } else {
+      user.value = null
+      authService.logout()
+    }
+  }
+
+  const login = async (credentials: LoginCredentials) => {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await authService.login(credentials)
+      authService.setAuth(response)
+      user.value = response.user
+    } catch (e: any) {
+      error.value = e.response?.data?.message || 'Erro ao fazer login'
+      throw error.value
+    } finally {
+      loading.value = false
+    }
   }
 
   const register = async (data: RegisterData) => {
+    loading.value = true
+    error.value = null
     try {
-      const { data: response } = await api.post<AuthResponse>('/api/auth/register', data)
-      setAuthData(response)
-      router.push('/students')
-      return response
-    } catch (error: any) {
-      console.error('Erro no registro:', error.response?.data || error.message)
-      throw new Error(error.response?.data?.message || 'Erro ao realizar cadastro')
+      const response = await authService.register(data)
+      authService.setAuth(response)
+      user.value = response.user
+      router.push('/dashboard')
+    } catch (e: any) {
+      error.value = e.response?.data?.message || 'Erro ao registrar'
+      throw error.value
+    } finally {
+      loading.value = false
     }
   }
 
-  const login = async (data: LoginData) => {
-    try {
-      const { data: response } = await api.post<AuthResponse>('/api/auth/login', data)
-      setAuthData(response)
-      router.push('/students')
-      return response
-    } catch (error: any) {
-      console.error('Erro no login:', error.response?.data || error.message)
-      throw new Error(error.response?.data?.message || 'Erro ao fazer login')
-    }
-  }
-
-  const logout = () => {
-    token.value = null
+  const logout = async () => {
+    await authService.logout()
     user.value = null
-    localStorage.removeItem('token')
     router.push('/login')
   }
 
-  const initialize = () => {
-    const savedToken = localStorage.getItem('token')
-    if (savedToken) {
-      token.value = savedToken
-    }
-  }
-
   return {
-    token,
     user,
+    loading,
+    error,
     isAuthenticated,
-    register,
+    initialize,
     login,
-    logout,
-    initialize
+    register,
+    logout
   }
-}) 
+})
