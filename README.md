@@ -102,15 +102,6 @@ npm run preview  # Visualiza build de produção
 npm run lint     # Executa linter
 ```
 
-## Acesso Inicial
-
-Após iniciar o sistema, você pode criar um novo usuário através da página de registro ou usar as credenciais padrão:
-
-```
-Email: admin@example.com
-Senha: admin123
-```
-
 ## Estrutura do Projeto
 
 ```
